@@ -16,5 +16,20 @@ export default NuxtAuthHandler({
             clientId: config.public.googleAuthClientId,
             clientSecret: config.googleAuthClientSecret
         })
-    ]
+    ],
+    callbacks: {
+        async session({ session, token }) {
+            if (session?.user?.email) {
+                const user = await prisma.user.findUnique({
+                    where: {
+                        email: session.user.email,
+                    },
+                });
+                if (user) {
+                    session.user.id = user.id; // Add userId to session.user
+                }
+            }
+            return session;
+        },
+    }
 })

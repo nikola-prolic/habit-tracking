@@ -82,6 +82,7 @@ model Habit {
 
 model Entry {
   id        Int      @id @default(autoincrement())
+  note      String?
   habitId   Int
   habit     Habit    @relation(fields: [habitId], references: [id], name: "HabitEntries")
   userId    String
