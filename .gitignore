@@ -24,3 +24,7 @@ logs
 !.env.example
 
 {HOME/
+
+
+#DB
+./**/*.db
