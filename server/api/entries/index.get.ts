@@ -1,5 +1,5 @@
 import { PrismaClient, Entry } from '@prisma/client' // Import Entry type
-import { defineEventHandler, getSession, getQuery, createError } from 'h3'
+import { defineEventHandler, getQuery, createError } from 'h3'
 import { getServerSession } from '#auth' // Correct session import
 
 

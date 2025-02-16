@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client'
-import { defineEventHandler, getRouterParam, getSession, createError } from 'h3'
+import { defineEventHandler, getRouterParam, createError } from 'h3'
 import { getServerSession } from '#auth'
 import { HabitWithEntries } from '~/prisma/types'
 
@@ -18,7 +18,7 @@ export default defineEventHandler(async (event) => {
     }
 
     const id = getRouterParam(event, 'id')
-    const habitId = id ? parseInt(id) : undefined;
+    const habitId = id ? id : undefined;
 
     if (!habitId) {
         throw createError({ statusCode: 400, message: 'Habit ID is required' })

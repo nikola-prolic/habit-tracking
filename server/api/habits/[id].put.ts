@@ -1,7 +1,6 @@
 import { PrismaClient } from '@prisma/client'
 import { defineEventHandler, getRouterParam, readBody, getSession, createError } from 'h3'
 import { getServerSession } from "#auth"
-import { hydrateOnVisible } from 'vue'
 import { HabitWithEntries } from '~/prisma/types'
 
 const prisma = new PrismaClient()
@@ -29,7 +28,7 @@ export default defineEventHandler(async (event) => {
 
 
     const id = getRouterParam(event, 'id')
-    const habitId = id ? parseInt(id) : undefined;
+    const habitId = id ? id : undefined;
     if (!habitId) {
         throw createError({ statusCode: 400, message: 'Habit ID is required' })
     }
@@ -47,8 +46,10 @@ export default defineEventHandler(async (event) => {
                 description: body.description,
                 requiredEntries: parseInt(String(body.requiredEntries)),
                 requiredEntryPeriod: body.requiredEntryPeriod,
-                resetDaily: body.resetDaily,
             },
+            include: {
+                entries: true
+            }
         })
         resp.habit = habit
         return resp

@@ -17,7 +17,7 @@ export default defineEventHandler(async (event) => {
     }
 
     const id = getRouterParam(event, 'id')
-    const entryId = id ? parseInt(id) : undefined;
+    const entryId = id ? id : undefined;
     if (!entryId) {
         throw createError({ statusCode: 400, message: 'Entry ID is required' })
     }

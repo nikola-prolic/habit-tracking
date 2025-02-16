@@ -19,7 +19,7 @@ export default defineEventHandler(async (event) => {
     }
 
     const id = getRouterParam(event, 'id')
-    const habitId = id ? parseInt(id) : undefined;
+    const habitId = id ? id : undefined;
     if (!habitId) {
         throw createError({ statusCode: 400, message: 'Habit ID is required' })
     }

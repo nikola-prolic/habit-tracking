@@ -19,12 +19,9 @@ export default defineEventHandler(async (event) => {
     }
 
     const body = await readBody<CreateEntryRequest>(event) // Use request type
-    const habitId = parseInt(String(body.habitId))
+    const habitId = String(body.habitId)
     const note = String(body.note)
 
-    if (isNaN(habitId)) {
-        throw createError({ statusCode: 400, message: 'Invalid Habit ID' })
-    }
 
     const resp: CreateEntryResponse = {} as CreateEntryResponse; // Initialize response object
 
@@ -43,7 +40,6 @@ export default defineEventHandler(async (event) => {
         throw createError({
             statusCode: 500,
             message: 'Could not create entry',
-            messageDetails: error.message,
         })
     } finally {
         await prisma.$disconnect()
