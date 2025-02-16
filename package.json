@@ -7,7 +7,7 @@
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare && prisma migrate deploy"
+    "postinstall": "nuxt prepare"
   },
   "dependencies": {
     "@next-auth/prisma-adapter": "^1.0.7",
