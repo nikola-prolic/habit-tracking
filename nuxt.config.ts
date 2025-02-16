@@ -35,7 +35,10 @@ export default defineNuxtConfig({
       extensions: ['.vue'], // File extensions to scan for
     }
   ],
-
+  prisma: {
+    runMigration: false, // Important for MongoDB
+    generateClient: true
+  },
   devtools: { enabled: true },
   echarts: {
     renderer: ['svg', 'canvas']
