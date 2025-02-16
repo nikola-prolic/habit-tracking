@@ -1,10 +1,11 @@
-import { Habit, PrismaClient } from '@prisma/client'
+import { PrismaClient } from '@prisma/client'
 import { defineEventHandler, getRouterParam, getSession, createError } from 'h3'
 import { getServerSession } from '#auth'
+import { HabitWithEntries } from '~/prisma/types'
 
 const prisma = new PrismaClient()
 export interface GetHabitByIdResp {
-    habit: Habit
+    habit: HabitWithEntries
 }
 
 export default defineEventHandler(async (event) => {

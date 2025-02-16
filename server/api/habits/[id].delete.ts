@@ -4,13 +4,13 @@ import { getServerSession } from "#auth"
 
 const prisma = new PrismaClient()
 
-export interface DeleeteHabitResponse {
+export interface DeleteHabitResponse {
     message: string;
     habit: Habit
 }
 
 export default defineEventHandler(async (event) => {
-    const resp: DeleeteHabitResponse = {} as DeleeteHabitResponse
+    const resp: DeleteHabitResponse = {} as DeleteHabitResponse
     const session = await getServerSession(event)
     const userId = session?.user?.id;
 
@@ -35,6 +35,7 @@ export default defineEventHandler(async (event) => {
         resp.habit = habit
         return resp
     } catch (error) {
+        console.log("coulnd't detele stuff: ", error)
         throw createError({ statusCode: 500, message: 'Could not delete habit' })
     } finally {
         await prisma.$disconnect()

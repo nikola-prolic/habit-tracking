@@ -1,19 +1,28 @@
-<script setup lang='ts'>
-  const { status, signIn, signOut } = useAuth()
-  const loggedIn = computed(() => status.value == "authenticated")
-  console.log("user is: ",loggedIn)
+<script setup lang="ts">
+import { useMainStore } from '~/stores/main';
 
-  async function handleSignIn() {
-    await signIn('google')
-  }
+const mainStore = useMainStore();
+const hasHabits = ref(false);
 
-  async function handleSignOut() {
-    await signOut()
-  }
+onMounted(() => {
+  mainStore.initUser();
+  mainStore.fetchHabits();
+});
+
+watch(
+  () => mainStore.habits,
+  (newHabits: any) => {
+    hasHabits.value = newHabits.length > 0;
+  },
+  { immediate: true }
+);
+
 </script>
+
 <template>
-  <div class="">
-    <button class="font-roboto font-bold px-4 bg-gray-50 border " v-if="loggedIn" @click="handleSignOut" >logout</button>
-    <button v-else @click="handleSignIn" >Sign in with google</button>
+  <div class="home-page">
+    <AddHabitModal />
+
+    <ListHabitsSection :hasHabits="true" />
   </div>
 </template>

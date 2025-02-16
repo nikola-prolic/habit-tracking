@@ -4,10 +4,8 @@ generator client {
 
 datasource db {
   provider = "sqlite"
-  url      = "file:./dev.db"
+  url      = env("DATABASE_URL")
 }
-
-
 
 // For the auth
 model Account {
@@ -58,7 +56,6 @@ model VerificationToken {
   @@unique([identifier, token])
 }
 
-
 // core application types
 
 enum HabitType {
@@ -74,7 +71,6 @@ model Habit {
   description         String?
   requiredEntries     Int
   requiredEntryPeriod HabitType @map("habitType")
-  resetDaily          Boolean   @default(false)
   createdAt           DateTime  @default(now())
   updatedAt           DateTime  @updatedAt
   entries             Entry[]   @relation(name: "HabitEntries")
@@ -84,7 +80,7 @@ model Entry {
   id        Int      @id @default(autoincrement())
   note      String?
   habitId   Int
-  habit     Habit    @relation(fields: [habitId], references: [id], name: "HabitEntries")
+  habit     Habit    @relation(fields: [habitId], references: [id], name: "HabitEntries", onDelete: Cascade)
   userId    String
   user      User     @relation(fields: [userId], references: [id], name: "UserEntries")
   createdAt DateTime @default(now())

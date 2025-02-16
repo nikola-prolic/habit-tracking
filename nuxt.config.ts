@@ -1,7 +1,11 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   modules: [
+    ['@pinia/nuxt', { autoImports: ['defineStore', 'acceptHMTUpdate'] }],
     '@sidebase/nuxt-auth',
+    '@vueuse/nuxt',
+    'nuxt-echarts',
+    "@prisma/nuxt",
     '@nuxtjs/tailwindcss',
     ['@nuxtjs/google-fonts', {
       families: {
@@ -24,30 +28,44 @@ export default defineNuxtConfig({
       }
     }],
   ],
-  compatibilityDate: '2024-11-01',
+  components: [
+    {
+      path: '~/components',
+      pathPrefix: false, // Optional:  If true, component names will include the directory prefix
+      extensions: ['.vue'], // File extensions to scan for
+    }
+  ],
+
   devtools: { enabled: true },
-  auth: {
-    isEnabled: true,
-    disableServerSideAuth: false,
-    provider: {
-      type: 'authjs',
-      trustHost: false,
-      defaultProvider: 'google',
-      addDefaultCallbackUrl: true
-    },
-    baseURL: process.env.BASE_URL + "/api/auth",
-    globalAppMiddleware: true
+  echarts: {
+    renderer: ['svg', 'canvas']
   },
+  auth: {
+    globalAppMiddleware: true,
+    baseURL: process.env.BASE_URL + "/api/auth"
+  },
+
   runtimeConfig: {
     // Keys within public are also exposed client-side
-    googleAuthClientSecret: process.env.AUTH_GOOGLE_CLIENT_SECRET, // Another way to set, with no default
+    DATABASE_URL: process.env.DATABASE_URL || 'file:' + require('path').join(process.cwd(), 'prisma', 'dev.db'),
+    googleAuthClientSecret: process.env.AUTH_GOOGLE_CLIENT_SECRET,
     authSecret: process.env.AUTH_APP_SECRET,
     public: {
       baseURL: 'http://localhost:3000', //Default value if no env var
-      googleAuthClientId: process.env.AUTH_GOOGLE_CLIENT_ID, // Another way to set, with no default
+      googleAuthClientId: process.env.AUTH_GOOGLE_CLIENT_ID,
     },
   },
-  imports: {
 
-  }
+  imports: {
+    dirs: ['./stores']
+  },
+
+  vite: {
+    resolve: {
+      alias: {
+        '.prisma/client/index-browser': './node_modules/.prisma/client/index-browser.js',
+      }
+    }
+  },
+  compatibilityDate: '2025-02-08'
 })

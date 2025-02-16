@@ -1,13 +1,14 @@
-import { Habit, PrismaClient } from '@prisma/client'
+import { PrismaClient } from '@prisma/client'
 import { defineEventHandler, getRouterParam, readBody, getSession, createError } from 'h3'
 import { getServerSession } from "#auth"
 import { hydrateOnVisible } from 'vue'
+import { HabitWithEntries } from '~/prisma/types'
 
 const prisma = new PrismaClient()
 
 // we could add a diff to show what fields has changed but we are good for now 
 export interface UpdateHabitResponse {
-    habit: Habit
+    habit: HabitWithEntries
 }
 export interface UpdateHabitObject {
     title?: string;

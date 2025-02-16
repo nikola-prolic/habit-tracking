@@ -1,11 +1,12 @@
-import { Habit, PrismaClient } from '@prisma/client'
+import { PrismaClient } from '@prisma/client'
 import { defineEventHandler, createError } from 'h3'
 import { getServerSession } from "#auth"
+import { HabitWithEntries } from '~/prisma/types';
 
 const prisma = new PrismaClient()
 
 export interface GetHabitsResponse {
-    habits: Habit[];
+    habits: HabitWithEntries[];
     count: number;
 }
 export interface HabitFilterObject {

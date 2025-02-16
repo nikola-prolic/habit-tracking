@@ -1,11 +1,12 @@
-import { Habit, PrismaClient } from '@prisma/client'
-import { defineEventHandler, readBody, getSession, createError } from 'h3'
+import { PrismaClient } from '@prisma/client'
+import { defineEventHandler, readBody, createError } from 'h3'
 import { getServerSession } from '#auth'
+import { HabitWithEntries } from '~/prisma/types'
 
 const prisma = new PrismaClient()
 
 export interface CreateHabitResponse {
-    habit: Habit
+    habit: HabitWithEntries
 }
 
 export interface CreateHabitObject {
@@ -13,7 +14,6 @@ export interface CreateHabitObject {
     description?: string;
     requiredEntries: number;
     requiredEntryPeriod: 'DAILY' | 'WEEKLY';
-    resetDaily: boolean;
 }
 
 export default defineEventHandler(async (event) => {
@@ -35,8 +35,10 @@ export default defineEventHandler(async (event) => {
                 description: body.description,
                 requiredEntries: parseInt(String(body.requiredEntries)),
                 requiredEntryPeriod: body.requiredEntryPeriod,
-                resetDaily: body.resetDaily,
             },
+            include: {
+                entries: true
+            }
         })
         if (!habit) {
             throw createError({ status: 500, message: "we could not create habit please check with support" })

@@ -4,7 +4,10 @@ import { PrismaAdapter } from "@next-auth/prisma-adapter"
 import { PrismaClient } from "@prisma/client"
 
 const config = useRuntimeConfig()
-const prisma = new PrismaClient()
+const prisma = new PrismaClient({
+    log: ['query', 'info', 'warn', 'error'],
+});
+
 
 export default NuxtAuthHandler({
     // A secret string you define, to ensure correct encryption
@@ -18,7 +21,7 @@ export default NuxtAuthHandler({
         })
     ],
     callbacks: {
-        async session({ session, token }) {
+        async session({ session }) {
             if (session?.user?.email) {
                 const user = await prisma.user.findUnique({
                     where: {
@@ -31,5 +34,8 @@ export default NuxtAuthHandler({
             }
             return session;
         },
+    },
+    pages: {
+        signIn: "/sign-in",
     }
 })
