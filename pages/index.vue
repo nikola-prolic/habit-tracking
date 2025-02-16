@@ -21,7 +21,6 @@ watch(
 
 <template>
   <div class="home-page">
-    <AddHabitModal />
 
     <ListHabitsSection :hasHabits="true" />
   </div>
